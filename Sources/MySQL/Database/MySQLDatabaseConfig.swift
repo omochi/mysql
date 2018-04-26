@@ -1,3 +1,5 @@
+import Foundation
+
 /// Config options for a `MySQLDatabase`
 public struct MySQLDatabaseConfig {
     /// Creates a `MySQLDatabaseConfig` with default settings.
@@ -19,13 +21,23 @@ public struct MySQLDatabaseConfig {
 
     /// Database name.
     public let database: String
+    
+    /// Connection timezone
+    public let timeZone: TimeZone?
 
     /// Creates a new `MySQLDatabaseConfig`.
-    public init(hostname: String = "127.0.0.1", port: Int = 3306, username: String, password: String? = nil, database: String) {
+    public init(hostname: String = "127.0.0.1",
+                port: Int = 3306,
+                username: String,
+                password: String? = nil,
+                database: String,
+                timeZone: TimeZone? = nil)
+    {
         self.hostname = hostname
         self.port = port
         self.username = username
         self.database = database
         self.password = password
+        self.timeZone = timeZone
     }
 }

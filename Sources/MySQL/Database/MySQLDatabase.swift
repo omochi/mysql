@@ -24,6 +24,19 @@ public final class MySQLDatabase: Database {
                     database: config.database,
                     password: config.password
                 ).transform(to: client)
+            }.flatMap(to: MySQLConnection.self) { client in
+                guard let timeZone = config.timeZone else {
+                    return Future.done(on: worker).transform(to: client)
+                }
+                
+                let seconds = timeZone.secondsFromGMT()
+                let absHour: Int = abs(seconds) / 3600
+                let absMin: Int = abs(seconds) % 3600 / 60
+                let signStr: String = seconds >= 0 ? "+" : "-"
+                let str: String = "\(signStr)\(absHour):\(absMin)"
+                
+                return client.simpleQuery("SET time_zone = '\(str)'")
+                    .transform(to: client)
             }
         }
     }
